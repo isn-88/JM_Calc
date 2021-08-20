@@ -2,80 +2,59 @@ public class JM_Calc {
     public static void main(String[] args) {
 
         Input input = new Input();
-        RomanNum roman = new RomanNum();
         Calculate calc = new Calculate();
+        CheckNumber number_1 = new CheckNumber();
+        CheckNumber number_2 = new CheckNumber();
+
 
 
         String text_input;
         String[] elements;
         String operations;
         String s_num_1 = "", s_num_2 = "";
-        int a = 0, b = 0;
         int result = 0;
-        boolean num1_is_arabic=false;
-        boolean num2_is_arabic=false;
-        boolean num1_is_roman=false;
-        boolean num2_is_roman=false;
+
 
 
 
 
         // Получить от пользователя арифметическую операцию
         System.out.println("Введите арифметическую операцию:");
-        text_input = input.getInput();// Получить от пользователя арифметическую операцию
-        elements = text_input.split(" ");// Получить все данные из введённой строки, которые были разделены пробелами
-        if(elements.length == 3) {
-            s_num_1 = elements[0];
-            operations = elements[1];
-            s_num_2 = elements[2];
-        } else if (elements.length < 3){
-            System.out.println("Арифметическая операция слишком короткая. ");
-            return;
-        } else if (elements.length > 3) {
-            System.out.println("Арифметическая операция слишком длинная. ");
-            return;
-        }
-        // Получить знак арифметической операции
-        operations = elements[1];
-
-        // Проверить 1й операнд
-        if (s_num_1.matches("[0-9.]+")) {
-            a = Integer.valueOf(s_num_1);
-            num1_is_arabic = true;
-        } else {
-            a = roman.RomanToArabic(s_num_1);
-            if (a > 0)  num1_is_roman = true;
-        }
-
-        // Проверить 2й операнд
-        if (s_num_2.matches("[0-9.]+")) {
-            b = Integer.valueOf(s_num_2);
-            num2_is_arabic = true;
-        } else {
-            b = roman.RomanToArabic(s_num_2);
-            if (b > 0)  num2_is_roman = true;
-        }
+        // Сохранить введенную строку
+        input.getInput();
+        // Разделить строку на элементы разделенные пробелами
+        input.splitInput();
+        // Проверить введенные данные на корректность
+        boolean is_correct = input.checkInput();
+        if(is_correct)
+        {
+            // Проверить 1-й операнд
+            number_1.checkNumber(input.str_num_1);
+            // Проверить 2-й операнд
+            number_2.checkNumber(input.str_num_2);
 
 
+            if (number_1.is_correct && number_2.is_correct) {
+                if (number_1.is_arabic && number_2.is_arabic) {
+                    if(number_1.value > 0 && number_1.value <= 10 && number_2.value > 0 && number_2.value <= 10) {
+                        result = calc.calculate(number_1.value, number_2.value, input.operation);
+                        System.out.println("Результат: " + result);
+                    } else {
+                        System.out.println("Введено слишком маленькое или слишком большое значение");
+                    }
+                } else if (number_1.is_roman && number_2.is_roman) {
+                    result = calc.calculate(number_1.value, number_2.value, input.operation);
+
+                } else {
+                    System.out.println("Используются одновременно разные системы счисления");
+                }
 
 
-        if (num1_is_arabic && num2_is_arabic) { // Если оба числа арабские
-            result = calc.calculate(a, b, operations);
-            System.out.println("Результат: " + result);
-        } else if (num1_is_roman && num2_is_roman) {
-            result = calc.calculate(a, b, operations);
-            if(result  > 0) {
-                System.out.println("Результат: " + result);
             } else {
-                System.out.println("В римской системе нет отрицательных чисел");
+                System.out.println("Неизвестный формат.");
             }
 
-        } else {
-            System.out.println("Используются одновременно разные системы счисления");
         }
-
-
-
 
 
 

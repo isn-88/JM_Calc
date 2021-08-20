@@ -42,7 +42,7 @@ public class Calculate {
                 break;
 
             default:
-                System.out.println("Введена не допустимая математическая операция.");
+                System.out.println("Введена недопустимая математическая операция.");
                 break;
         }
         return result;
