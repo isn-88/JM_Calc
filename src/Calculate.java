@@ -21,34 +21,15 @@ public class Calculate {
     }
 
 
-
     int calculate(int a,int b, String operations) {
         int result=0;
         switch (operations) {
-            case "+":
-                result = addition(a, b);
-                break;
-
-            case "-":
-                result = subtraction(a, b);
-                break;
-
-            case "*":
-                result = multiplication(a, b);
-                break;
-
-            case "/":
-                result = division(a, b);
-                break;
-
-            default:
-                System.out.println("Введена недопустимая математическая операция.");
-                break;
+            case "+" -> result = addition(a, b);
+            case "-" -> result = subtraction(a, b);
+            case "*" -> result = multiplication(a, b);
+            case "/" -> result = division(a, b);
+            default -> System.out.println("Введена недопустимая математическая операция.");
         }
         return result;
     }
-
-
-
-
 }

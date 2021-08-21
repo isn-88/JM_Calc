@@ -1,35 +1,54 @@
 import java.util.Scanner;
 public class Input {
 
-    String text = "";
+    String textInput = "";
     String[] elements;
-    String str_num_1, str_num_2;
-    String operation;
-
+    DataType[] type;
 
     void getInput() {
         Scanner s = new Scanner(System.in);
-        text = s.nextLine();
+        textInput = s.nextLine();
     }
 
     void splitInput() {
-        elements = text.split(" ");
+        elements = textInput.split(" ");
     }
 
-
     boolean checkInput() {
-        // Проверка на количество полученных элементов
-        if(elements.length == 3) {
-            str_num_1 = elements[0];
-            operation = elements[1];
-            str_num_2 = elements[2];
+        boolean result = false;
+        if (elements.length  == 3) {
+            type = new DataType[elements.length];
+            setDataType();
+            if(checkMath(elements[1])) {
+                result = true;
+            } else {
+                System.out.println("Некорректная математическая операция.");
+            }
         } else if (elements.length < 3) {
-            System.out.println("Арифметическая операция слишком короткая.");
-            return false;
-        } else if (elements.length > 3) {
-            System.out.println("Арифметическая операция слишком длинная. ");
-            return false;
+            System.out.println("Введено слишком мало данных.");
+            System.out.println("Пример ввода арифметической операции: 2 * 2 или V + III");
+        } else {
+            System.out.println("Введено слишком много данных.");
+            System.out.println("Пример ввода арифметической операции: 2 * 2 или V + III");
         }
-        return true;
+        return result;
+    }
+
+    boolean checkMath(String operation) {
+        return operation.equals("+") || operation.equals("-") || operation.equals("*") || operation.equals("/");
+    }
+
+    void setDataType() {
+        for (int i = 0; i < type.length; i++) {
+            if (elements[i].matches("-?[0-9]+")) {
+                type[i] = DataType.NUMBER;
+            } else if (elements[i].matches("[IVXLCDM.]+")) {
+                type[i] = DataType.ROMAN;
+            } else if (elements[i].matches("[-+*/.]+")) {
+                type[i] = DataType.MATH;
+            } else {
+                type[i] = DataType.UNKNOWN;
+            }
+        }
     }
 }

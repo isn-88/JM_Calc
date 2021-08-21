@@ -1,71 +1,57 @@
 public class JM_Calc {
     public static void main(String[] args) {
-
+        int result;
         Input input = new Input();
         Calculate calc = new Calculate();
-        CheckNumber number_1 = new CheckNumber();
-        CheckNumber number_2 = new CheckNumber();
-
-
-
-        String text_input;
-        String[] elements;
-        String operations;
-        String s_num_1 = "", s_num_2 = "";
-        int result = 0;
-
-
-
-
+        RomanNum roman = new RomanNum();
 
         // Получить от пользователя арифметическую операцию
         System.out.println("Введите арифметическую операцию:");
-        // Сохранить введенную строку
+        // Получить введенную строку
         input.getInput();
         // Разделить строку на элементы разделенные пробелами
         input.splitInput();
         // Проверить введенные данные на корректность
         boolean is_correct = input.checkInput();
-        if(is_correct)
-        {
-            // Проверить 1-й операнд
-            number_1.checkNumber(input.str_num_1);
-            // Проверить 2-й операнд
-            number_2.checkNumber(input.str_num_2);
-
-
-            if (number_1.is_correct && number_2.is_correct) {
-                if (number_1.is_arabic && number_2.is_arabic) {
-                    if(number_1.value > 0 && number_1.value <= 10 && number_2.value > 0 && number_2.value <= 10) {
-                        result = calc.calculate(number_1.value, number_2.value, input.operation);
-                        System.out.println("Результат: " + result);
-                    } else {
-                        System.out.println("Введено слишком маленькое или слишком большое значение");
-                    }
-                } else if (number_1.is_roman && number_2.is_roman) {
-                    result = calc.calculate(number_1.value, number_2.value, input.operation);
-
+        if(is_correct) {
+            if(input.type[0] == DataType.NUMBER && input.type[1] == DataType.MATH && input.type[2] == DataType.NUMBER) {
+                // Введено: число 1, математическая операция, число 2
+                int a = Integer.parseInt(input.elements[0]);
+                int b = Integer.parseInt(input.elements[2]);
+                if((a > 0 && a <= 10) && (b > 0 && b <= 10)) {
+                    String operation = input.elements[1];
+                    result = calc.calculate(a, b, operation);
+                    System.out.println("Результат: " + result);
                 } else {
-                    System.out.println("Используются одновременно разные системы счисления");
+                    System.out.println("Введено слишком маленькое либо слишком большое значение.");
+                    System.out.println("Допустимое значение чисел от 1 до 10.");
                 }
-
-
+            } else if (input.type[0] == DataType.ROMAN && input.type[1] == DataType.MATH && input.type[2] == DataType.ROMAN) {
+                // Введено: римское число 1, математическая операция, римское число 2
+                int a = roman.toArabic(input.elements[0]);
+                int b = roman.toArabic(input.elements[2]);
+                if((a > 0 && a <= 10) && (b > 0 && b <= 10)) {
+                    String operation = input.elements[1];
+                    result = calc.calculate(a, b, operation);
+                    if(result > 0) {
+                        System.out.println("Результат: " + roman.toRoman(result));
+                    } else {
+                        System.out.println("Ошибка. Результат вычисления < 1.");
+                        System.out.println("В римской системе счисления нет нуля и отрицательных чисел.");
+                    }
+                } else {
+                    System.out.println("Введено слишком маленькое либо слишком большое значение.");
+                    System.out.println("Допустимое значение чисел от 1 до 10.");
+                }
+            } else if ((input.type[0] == DataType.NUMBER || input.type[0] == DataType.ROMAN) &&
+                    input.type[1] == DataType.MATH &&
+                    (input.type[2] == DataType.NUMBER || input.type[2] == DataType.ROMAN)) {
+                System.out.println("Ошибка. Используются одновременно разные системы счисления.");
             } else {
-                System.out.println("Неизвестный формат.");
+                System.out.println("Данные введены некорректно.");
+                System.out.println("Пример ввода арифметической операции: 2 * 2 или V + III");
             }
-
-        }
-
-
-
-
-
-
-
-
-
-
-
-
+       }
     }
 }
+
